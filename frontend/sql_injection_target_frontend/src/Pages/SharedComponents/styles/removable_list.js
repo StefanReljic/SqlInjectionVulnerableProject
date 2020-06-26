@@ -1,0 +1,1 @@
+export const removeButtonStyles = { backgroundColor: 'red', color: 'white' }

@@ -1,0 +1,12 @@
+.dropdown:hover .dropbtn {
+  border: solid;
+  border-width: 1px;
+  border-color: steelblue;
+}
+
+.image {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  margin-top: 4px;
+}

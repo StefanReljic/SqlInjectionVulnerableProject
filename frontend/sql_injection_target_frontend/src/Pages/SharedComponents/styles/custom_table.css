@@ -1,0 +1,12 @@
+.ReactTable .rt-thead {
+  background-color: #352f4b;
+  color: white;
+}
+
+.ReactTable .rt-tr-group {
+  background-color: white;
+}
+
+.ReactTable .pagination-bottom {
+  background-color: #f6f6f6;
+}

@@ -1,0 +1,16 @@
+.shoppingCart {
+  height: 100%;
+  float: right;
+  border-radius: 3px;
+}
+
+.shoppingCart:hover {
+  border: solid;
+  border-width: 1px;
+  border-color: steelblue;
+}
+
+.shoppingCartButton {
+  background-color: 'transparent';
+  height: 100%;
+}
