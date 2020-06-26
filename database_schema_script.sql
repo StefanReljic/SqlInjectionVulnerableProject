@@ -1,0 +1,119 @@
+-- MySQL Workbench Synchronization
+-- Generated: 2020-02-10 14:58
+-- Model: New Model
+-- Version: 1.0
+-- Project: Name of the project
+-- Author: reljics
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+
+CREATE SCHEMA IF NOT EXISTS `sqli_test` DEFAULT CHARACTER SET utf8 ;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`USER` (
+  `id` BIGINT(20) NOT NULL,
+  `username` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(45) NOT NULL,
+  `firstname` VARCHAR(45) NOT NULL,
+  `lastname` VARCHAR(45) NOT NULL,
+  `role_id` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `username_UNIQUE` (`username` ASC),
+  INDEX `fk_USER_ROLE1_idx` (`role_id` ASC),
+  CONSTRAINT `fk_USER_ROLE1`
+    FOREIGN KEY (`role_id`)
+    REFERENCES `sqli_test`.`ROLE` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`STORE` (
+  `id` BIGINT(20) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `address` VARCHAR(45) NOT NULL,
+  `phone` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`BOOK` (
+  `id` BIGINT(20) NOT NULL,
+  `name` VARCHAR(90) NOT NULL,
+  `writer` VARCHAR(100) NOT NULL,
+  `publisher` VARCHAR(45) NOT NULL,
+  `publishing_year` DATE NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`STORE_BOOK` (
+  `store_id` BIGINT(20) NOT NULL,
+  `book_id` BIGINT(20) NOT NULL,
+  `total_quantity` INT(11) NOT NULL DEFAULT 0,
+  `sold` INT(11) NOT NULL DEFAULT 0,
+  `price` DOUBLE NOT NULL DEFAULT 0,
+  PRIMARY KEY (`store_id`, `book_id`),
+  INDEX `fk_STORE_has_BOOK_BOOK1_idx` (`book_id` ASC),
+  INDEX `fk_STORE_has_BOOK_STORE_idx` (`store_id` ASC),
+  CONSTRAINT `fk_STORE_has_BOOK_STORE`
+    FOREIGN KEY (`store_id`)
+    REFERENCES `sqli_test`.`STORE` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_STORE_has_BOOK_BOOK1`
+    FOREIGN KEY (`book_id`)
+    REFERENCES `sqli_test`.`BOOK` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`ROLE` (
+  `id` BIGINT(20) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`TRANSACTION` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `user_id` BIGINT(20) NOT NULL,
+  `date` TIMESTAMP NOT NULL,
+  `totalPrice` DOUBLE NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_CART_USER1_idx` (`user_id` ASC),
+  CONSTRAINT `fk_CART_USER1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `sqli_test`.`USER` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `sqli_test`.`TRANSACTION_ITEM` (
+  `cart_id` INT(11) NOT NULL,
+  `store_id` BIGINT(20) NOT NULL,
+  `book_id` BIGINT(20) NOT NULL,
+  `quantity` INT(11) NOT NULL,
+  `price` DOUBLE NULL DEFAULT NULL,
+  INDEX `fk_CART_ITEMS_CART1_idx` (`cart_id` ASC),
+  INDEX `fk_CART_ITEM_STORE_has_BOOK1_idx` (`store_id` ASC, `book_id` ASC),
+  CONSTRAINT `fk_CART_ITEMS_CART1`
+    FOREIGN KEY (`cart_id`)
+    REFERENCES `sqli_test`.`TRANSACTION` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_CART_ITEM_STORE_has_BOOK1`
+    FOREIGN KEY (`store_id` , `book_id`)
+    REFERENCES `sqli_test`.`STORE_BOOK` (`store_id` , `book_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
